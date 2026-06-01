@@ -1,5 +1,5 @@
 import { body, validationResult } from "express-validator";
-
+// Validation middleware to check request bodies and parameters
 export const validateRequest = (validations) => {
   return async (req, res, next) => {
     await Promise.all(validations.map((validation) => validation.run(req)));
