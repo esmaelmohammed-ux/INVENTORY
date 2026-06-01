@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
-// Authentication middleware to verify JWT and attach user info to the request
+
 export const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
@@ -62,7 +62,7 @@ export const canAccessDepartment = (req, res, next) => {
   }
 
   const requestedDepartmentId = parseInt(
-    req.params.departmentId || req.body.departmentId,
+    req.params.departmentId || req.body.departmentId
   );
 
   if (req.user.departmentId !== requestedDepartmentId) {
