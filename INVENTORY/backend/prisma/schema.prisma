@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       Int              @id @default(autoincrement())
+  email                    String           @unique
+  password                 String
+  firstName                String
+  lastName                 String
+  role                     UserRole
+  departmentId             Int?
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  requisitions             Requisition[]
+  processedRequisitions    Requisition[]    @relation("ProcessedRequisitions")
+  serviceRequests          ServiceRequest[]
+  processedServiceRequests ServiceRequest[] @relation("ProcessedServiceRequests")
+  Transaction              Transaction[]
+  auditLogs                AuditLog[]
+  department               Department?      @relation(fields: [departmentId], references: [id])
+}
+
+model Department {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  description     String?          @db.Text
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  requisitions    Requisition[]
+  serviceRequests ServiceRequest[]
+  users           User[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       Item[]
+}
+
+model Item {
+  id           Int               @id @default(autoincrement())
+  name         String            @unique
+  description  String?           @db.Text
+  quantity     Int               @default(0)
+  minQuantity  Int               @default(0)
+  unit         String
+  categoryId   Int
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  category     Category          @relation(fields: [categoryId], references: [id])
+  requisitions RequisitionItem[]
+  transactions Transaction[]
+}
+
+model Transaction {
+  id            Int             @id @default(autoincrement())
+  type          TransactionType
+  itemId        Int
+  quantity      Int
+  notes         String?
+  userId        Int
+  requisitionId Int?
+  createdAt     DateTime        @default(now())
+  item          Item            @relation(fields: [itemId], references: [id])
+  requisition   Requisition?    @relation(fields: [requisitionId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
+
+  @@index([itemId])
+  @@index([createdAt])
+}
+
+model Requisition {
+  id                 Int               @id @default(autoincrement())
+  title              String
+  description        String?           @db.Text
+  status             RequisitionStatus @default(PENDING)
+  createdById        Int
+  departmentId       Int
+  reasonForRejection String?           @db.Text
+  processedById      Int?
+  processedAt        DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  createdBy          User              @relation(fields: [createdById], references: [id])
+  department         Department        @relation(fields: [departmentId], references: [id])
+  processedBy        User?             @relation("ProcessedRequisitions", fields: [processedById], references: [id])
+  items              RequisitionItem[]
+  Transaction        Transaction[]
+}
+
+model RequisitionItem {
+  id            Int         @id @default(autoincrement())
+  requisitionId Int
+  itemId        Int
+  quantity      Int
+  item          Item        @relation(fields: [itemId], references: [id])
+  requisition   Requisition @relation(fields: [requisitionId], references: [id], onDelete: Cascade)
+}
+
+model ServiceRequest {
+  id                 Int               @id @default(autoincrement())
+  title              String
+  description        String            @db.Text
+  status             RequisitionStatus @default(PENDING)
+  createdById        Int
+  departmentId       Int
+  reasonForRejection String?           @db.Text
+  processedById      Int?
+  processedAt        DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  createdBy          User              @relation(fields: [createdById], references: [id])
+  department         Department        @relation(fields: [departmentId], references: [id])
+  processedBy        User?             @relation("ProcessedServiceRequests", fields: [processedById], references: [id])
+}
+
+enum UserRole {
+  STOREKEEPER
+  DEPARTMENT_HEAD
+  PROCUREMENT_OFFICER
+  ADMIN
+  AUDITOR
+}
+
+enum TransactionType {
+  RECEIVE
+  ISSUE
+  ADJUST
+}
+
+enum RequisitionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FULFILLED
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  action     String   // e.g., "USER_CREATED", "REQUISITION_APPROVED", "AUTH_LOGIN"
+  entityType String   // e.g., "USER", "REQUISITION", "ITEM", "SERVICE_REQUEST"
+  entityId   String?  // ID of the affected entity
+  oldValues  String?  @db.Text // JSON string of old values (for updates)
+  newValues  String?  @db.Text // JSON string of new values
+  userId     Int?     // User who performed the action
+  ipAddress  String?  // IP address of the user
+  userAgent  String?  @db.Text // User agent string
+  metadata   String?  @db.Text // Additional metadata as JSON
+  status     String   @default("SUCCESS") // SUCCESS, FAILED, WARNING
+  timestamp  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([userId])
+  @@index([timestamp])
+  @@index([action, entityType])
+}
