@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-
+// Service for creating and retrieving audit logs
 export class AuditLogService {
   static async createAuditLog({
     action,
@@ -59,7 +59,7 @@ export class AuditLogService {
     ipAddress,
     userAgent,
     status = "SUCCESS",
-    metadata = null
+    metadata = null,
   ) {
     return this.createAuditLog({
       action: `AUTH_${action}`,
@@ -83,7 +83,7 @@ export class AuditLogService {
     performedBy,
     oldValues = null,
     newValues = null,
-    ipAddress = null
+    ipAddress = null,
   ) {
     return this.createAuditLog({
       action: `USER_${action}`,
@@ -110,7 +110,7 @@ export class AuditLogService {
     userId,
     oldValues = null,
     newValues = null,
-    metadata = null
+    metadata = null,
   ) {
     return this.createAuditLog({
       action: `REQUISITION_${action}`,
@@ -132,7 +132,7 @@ export class AuditLogService {
     userId,
     oldValues = null,
     newValues = null,
-    metadata = null
+    metadata = null,
   ) {
     return this.createAuditLog({
       action: `SERVICE_REQUEST_${action}`,
@@ -154,7 +154,7 @@ export class AuditLogService {
     userId,
     oldValues = null,
     newValues = null,
-    metadata = null
+    metadata = null,
   ) {
     return this.createAuditLog({
       action: `INVENTORY_${action}`,
@@ -177,7 +177,7 @@ export class AuditLogService {
     userId,
     oldValues = null,
     newValues = null,
-    metadata = null
+    metadata = null,
   ) {
     return this.createAuditLog({
       action: `SYSTEM_${action}`,
@@ -299,7 +299,7 @@ export class AuditLogService {
           select: { timestamp: true },
           orderBy: { timestamp: "asc" },
         }),
-      ]
+      ],
     );
 
     // Process daily stats
@@ -322,7 +322,7 @@ export class AuditLogService {
           role: user?.role || "Unknown",
           activityCount: stat._count.id,
         };
-      })
+      }),
     );
 
     return {
