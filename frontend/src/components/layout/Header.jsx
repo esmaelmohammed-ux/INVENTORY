@@ -23,7 +23,6 @@ import {
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useThemeContext } from "../../contexts/ThemeContext";
-// This component renders the header of the application, which includes the app title, a menu button for mobile view, a theme toggle button, the user's role displayed as a chip, and an avatar that opens a profile menu. The header is responsive and adapts to different screen sizes. It also handles user interactions such as opening the profile menu and logging out.
 const drawerWidth = 280;
 
 const Header = ({ onMenuClick }) => {
