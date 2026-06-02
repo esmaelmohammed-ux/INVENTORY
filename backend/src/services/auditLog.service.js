@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-// AuditLogService: Centralized service for creating and retrieving audit logs
+
 export class AuditLogService {
   static async createAuditLog({
     action,
