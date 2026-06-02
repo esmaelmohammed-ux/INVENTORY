@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthContext";
 import { useThemeContext } from "../../contexts/ThemeContext";
-
+// This component renders a login form for users to enter their email and password. It includes state management for form inputs, error handling, and loading state. The form is styled using Material-UI components and adapts to light and dark themes. Upon submission, it calls the login function from the authentication context and handles any errors that may occur during the login process.
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
     email: "",
