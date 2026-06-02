@@ -18,7 +18,7 @@ router.post("/", authorize("DEPARTMENT_HEAD"), createServiceRequest);
 router.get(
   "/stats",
   authorize("PROCUREMENT_OFFICER", "STOREKEEPER", "ADMIN", "AUDITOR"),
-  getServiceRequestStats
+  getServiceRequestStats,
 );
 
 router.get(
@@ -28,9 +28,9 @@ router.get(
     "PROCUREMENT_OFFICER",
     "STOREKEEPER",
     "ADMIN",
-    "AUDITOR"
+    "AUDITOR",
   ),
-  getServiceRequests
+  getServiceRequests,
 );
 
 router.get("/:id", getServiceRequestById);
@@ -38,13 +38,13 @@ router.get("/:id", getServiceRequestById);
 router.patch(
   "/:id/status",
   authorize("PROCUREMENT_OFFICER"),
-  updateServiceRequestStatus
+  updateServiceRequestStatus,
 );
 
 router.delete(
   "/:id",
   authorize("DEPARTMENT_HEAD", "PROCUREMENT_OFFICER", "ADMIN"),
-  deleteServiceRequest
+  deleteServiceRequest,
 );
 
 export default router;

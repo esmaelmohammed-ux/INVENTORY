@@ -13,9 +13,9 @@ router.get(
     "PROCUREMENT_OFFICER",
     "STOREKEEPER",
     "ADMIN",
-    "AUDITOR"
+    "AUDITOR",
   ),
-  getDashboardStats
+  getDashboardStats,
 );
 
 export default router;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+// This route handles authentication-related endpoints such as login, registration, and profile retrieval.
 import {
   getProfile,
   login,

@@ -23,14 +23,15 @@ router.get(
     "PROCUREMENT_OFFICER",
     "STOREKEEPER",
     "ADMIN",
-    "AUDITOR"
+    "AUDITOR",
   ),
-  getRequisitions
+  getRequisitions,
 );
+// Get requisition statistics for dashboard
 router.get(
   "/stats",
   authorize("PROCUREMENT_OFFICER", "STOREKEEPER", "ADMIN", "AUDITOR"),
-  getRequisitionStats
+  getRequisitionStats,
 );
 
 router.get("/:id", getRequisitionById);
@@ -38,7 +39,7 @@ router.get("/:id", getRequisitionById);
 router.patch(
   "/:id/status",
   authorize("PROCUREMENT_OFFICER"),
-  updateRequisitionStatus
+  updateRequisitionStatus,
 );
 
 router.post("/:id/fulfill", authorize("STOREKEEPER"), fulfillRequisition);
@@ -46,7 +47,7 @@ router.post("/:id/fulfill", authorize("STOREKEEPER"), fulfillRequisition);
 router.delete(
   "/:id",
   authorize("DEPARTMENT_HEAD", "PROCUREMENT_OFFICER", "ADMIN"),
-  deleteRequisition
+  deleteRequisition,
 );
 
 export default router;

@@ -15,9 +15,9 @@ router.get(
     "PROCUREMENT_OFFICER",
     "STOREKEEPER",
     "ADMIN",
-    "AUDITOR"
+    "AUDITOR",
   ),
-  getItems
+  getItems,
 );
 
 router.post("/", authorize("ADMIN", "STOREKEEPER"), createItem);
