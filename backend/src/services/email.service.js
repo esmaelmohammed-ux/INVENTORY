@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 
-// Create transporter (configure with your email service)
 const createTransporter = () => {
   return nodemailer.createTransporter({
     host: process.env.SMTP_HOST || "smtp.gmail.com",

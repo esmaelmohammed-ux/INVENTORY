@@ -1,5 +1,7 @@
 import prisma from "../lib/prisma.js";
-
+// This service provides comprehensive audit logging for all critical actions in the system.
+// It captures details about the action, the user performing it, and the before/after state of relevant data.
+// This is essential for security, compliance, and troubleshooting.
 export class AuditLogService {
   static async createAuditLog({
     action,
