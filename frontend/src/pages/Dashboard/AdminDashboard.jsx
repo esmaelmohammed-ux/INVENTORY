@@ -26,7 +26,7 @@ import {
   CheckCircle,
   Receipt as TransactionIcon,
 } from "@mui/icons-material";
-
+// This component renders the admin dashboard for the inventory management system. It displays key statistics, recent activity, and quick actions for administrators. The dashboard is organized into sections for an overview of system metrics, recent user interactions, and system status indicators. It also includes a tabbed interface to switch between the main dashboard view and detailed transaction analytics.
 import { useDashboardStats, useItems } from "../../services/queries";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import TransactionStats from "../Transactions/TransactionStats";
