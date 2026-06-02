@@ -19,72 +19,114 @@ import {
   Cancel as RejectedIcon,
   TrendingUp as StatsIcon,
 } from "@mui/icons-material";
-import { useDashboardStats, useRequisitions, useServiceRequests, useServiceRequestStats } from "../../services/queries";
+import {
+  useDashboardStats,
+  useRequisitions,
+  useServiceRequests,
+  useServiceRequestStats,
+} from "../../services/queries";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
-
+// This component renders the procurement officer's dashboard, displaying key metrics related to pending requisitions and service requests, as well as recent decisions on these requests. It uses Material-UI components for layout and styling, and it fetches data using custom hooks that interact with the backend API. The dashboard provides quick access to review pending requisitions and service requests, and it highlights important statistics to help procurement officers manage their tasks effectively.
 const ProcurementDashboard = () => {
   const navigate = useNavigate();
   const { data: stats, isLoading, error } = useDashboardStats();
-  const { data: pendingRequisitions = [], isLoading: prLoading } = useRequisitions({ status: "PENDING" });
-  const { data: pendingServiceRequests = [], isLoading: psrLoading } = useServiceRequests({ status: "PENDING" });
+  const { data: pendingRequisitions = [], isLoading: prLoading } =
+    useRequisitions({ status: "PENDING" });
+  const { data: pendingServiceRequests = [], isLoading: psrLoading } =
+    useServiceRequests({ status: "PENDING" });
   const { data: sReqStats } = useServiceRequestStats();
   // recent decisions from service requests (approved/rejected)
-  const { data: sReqApproved = [] } = useServiceRequests({ status: "APPROVED" });
-  const { data: sReqRejected = [] } = useServiceRequests({ status: "REJECTED" });
+  const { data: sReqApproved = [] } = useServiceRequests({
+    status: "APPROVED",
+  });
+  const { data: sReqRejected = [] } = useServiceRequests({
+    status: "REJECTED",
+  });
 
   if (isLoading || prLoading || psrLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading dashboard data</div>;
 
-    
   return (
     <Box>
       {/* Approval Stats using CSS Grid */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3, mb: 4 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
+          },
+          gap: 3,
+          mb: 4,
+        }}
+      >
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <PendingIcon color="warning" sx={{ fontSize: 40, mb: 1 }} />
-            <Typography variant="h4">{stats?.pendingApprovals?.requisitions || 0}</Typography>
+            <Typography variant="h4">
+              {stats?.pendingApprovals?.requisitions || 0}
+            </Typography>
             <Typography color="textSecondary">Pending Requisitions</Typography>
           </CardContent>
         </Card>
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <PendingIcon color="info" sx={{ fontSize: 40, mb: 1 }} />
-            <Typography variant="h4">{stats?.pendingApprovals?.serviceRequests || 0}</Typography>
-            <Typography color="textSecondary">Pending Service Requests</Typography>
+            <Typography variant="h4">
+              {stats?.pendingApprovals?.serviceRequests || 0}
+            </Typography>
+            <Typography color="textSecondary">
+              Pending Service Requests
+            </Typography>
           </CardContent>
         </Card>
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <ApprovedIcon color="success" sx={{ fontSize: 40, mb: 1 }} />
-            <Typography variant="h4">{stats?.requisitions?.APPROVED || 0}</Typography>
+            <Typography variant="h4">
+              {stats?.requisitions?.APPROVED || 0}
+            </Typography>
             <Typography color="textSecondary">Requisitions Approved</Typography>
           </CardContent>
         </Card>
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <RejectedIcon color="error" sx={{ fontSize: 40, mb: 1 }} />
-            <Typography variant="h4">{stats?.requisitions?.REJECTED || 0}</Typography>
+            <Typography variant="h4">
+              {stats?.requisitions?.REJECTED || 0}
+            </Typography>
             <Typography color="textSecondary">Requisitions Rejected</Typography>
           </CardContent>
         </Card>
       </Box>
 
       {/* Service Request Stats */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 3, mb: 4 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+          gap: 3,
+          mb: 4,
+        }}
+      >
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <ApprovedIcon color="success" sx={{ fontSize: 40, mb: 1 }} />
             <Typography variant="h4">{sReqStats?.APPROVED || 0}</Typography>
-            <Typography color="textSecondary">Service Requests Approved</Typography>
+            <Typography color="textSecondary">
+              Service Requests Approved
+            </Typography>
           </CardContent>
         </Card>
         <Card>
-          <CardContent sx={{ textAlign: 'center' }}>
+          <CardContent sx={{ textAlign: "center" }}>
             <RejectedIcon color="error" sx={{ fontSize: 40, mb: 1 }} />
             <Typography variant="h4">{sReqStats?.REJECTED || 0}</Typography>
-            <Typography color="textSecondary">Service Requests Rejected</Typography>
+            <Typography color="textSecondary">
+              Service Requests Rejected
+            </Typography>
           </CardContent>
         </Card>
       </Box>
@@ -93,9 +135,20 @@ const ProcurementDashboard = () => {
         {/* Pending Requisitions */}
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>Pending Requisitions</Typography>
-              <Chip label={`${pendingRequisitions.length} pending`} color="warning" size="small" />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={1}
+            >
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                Pending Requisitions
+              </Typography>
+              <Chip
+                label={`${pendingRequisitions.length} pending`}
+                color="warning"
+                size="small"
+              />
             </Box>
             <Divider sx={{ mb: 2 }} />
 
@@ -104,9 +157,15 @@ const ProcurementDashboard = () => {
                 <ListItem key={index} divider>
                   <ListItemText
                     primary={req.title}
-                    secondary={`${req.department?.name || req.department || ''} • ${(req.items?.length || req.items || 0)} items • ${new Date(req.createdAt).toLocaleDateString()}`}
+                    secondary={`${req.department?.name || req.department || ""} • ${req.items?.length || req.items || 0} items • ${new Date(req.createdAt).toLocaleDateString()}`}
                   />
-                  <Button size="small" variant="outlined" onClick={() => navigate(`/requisitions/${req.id || req._id}`)}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() =>
+                      navigate(`/requisitions/${req.id || req._id}`)
+                    }
+                  >
                     Review
                   </Button>
                 </ListItem>
@@ -123,7 +182,11 @@ const ProcurementDashboard = () => {
               <Divider sx={{ mt: 1, mb: 1 }} />
             )}
             {pendingRequisitions.length > 0 && (
-              <Button fullWidth variant="text" onClick={() => navigate('/requisitions')}>
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => navigate("/requisitions")}
+              >
                 View All Requisitions
               </Button>
             )}
@@ -133,9 +196,20 @@ const ProcurementDashboard = () => {
         {/* Pending Service Requests */}
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>Pending Service Requests</Typography>
-              <Chip label={`${pendingServiceRequests.length} pending`} color="info" size="small" />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={1}
+            >
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                Pending Service Requests
+              </Typography>
+              <Chip
+                label={`${pendingServiceRequests.length} pending`}
+                color="info"
+                size="small"
+              />
             </Box>
             <Divider sx={{ mb: 2 }} />
 
@@ -144,9 +218,15 @@ const ProcurementDashboard = () => {
                 <ListItem key={index} divider>
                   <ListItemText
                     primary={req.title}
-                    secondary={`${req.department?.name || req.department || ''} • ${new Date(req.createdAt).toLocaleDateString()}`}
+                    secondary={`${req.department?.name || req.department || ""} • ${new Date(req.createdAt).toLocaleDateString()}`}
                   />
-                  <Button size="small" variant="outlined" onClick={() => navigate(`/service-requests/${req.id || req._id}`)}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() =>
+                      navigate(`/service-requests/${req.id || req._id}`)
+                    }
+                  >
                     Review
                   </Button>
                 </ListItem>
@@ -163,7 +243,11 @@ const ProcurementDashboard = () => {
               <Divider sx={{ mt: 1, mb: 1 }} />
             )}
             {pendingServiceRequests.length > 0 && (
-              <Button fullWidth variant="text" onClick={() => navigate('/service-requests')}>
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => navigate("/service-requests")}
+              >
                 View All Service Requests
               </Button>
             )}
@@ -181,15 +265,17 @@ const ProcurementDashboard = () => {
             list.map((d) => ({
               title: d.title,
               department: d.department?.name || d.department || "",
-              processedBy:
-                d.processedBy?.firstName
-                  ? `${d.processedBy.firstName} ${d.processedBy.lastName || ""}`.trim()
-                  : d.processedBy || "",
+              processedBy: d.processedBy?.firstName
+                ? `${d.processedBy.firstName} ${d.processedBy.lastName || ""}`.trim()
+                : d.processedBy || "",
               status: d.status,
               time: d.processedAt || d.createdAt,
             }));
           const reqDecisions = mapReqDecisions(stats?.recentDecisions || []);
-          const sDecisions = mapReqDecisions([...(sReqApproved || []), ...(sReqRejected || [])]);
+          const sDecisions = mapReqDecisions([
+            ...(sReqApproved || []),
+            ...(sReqRejected || []),
+          ]);
           const combined = [...reqDecisions, ...sDecisions]
             .filter((d) => d.status === "APPROVED" || d.status === "REJECTED")
             .sort((a, b) => new Date(b.time) - new Date(a.time))
@@ -219,7 +305,9 @@ const ProcurementDashboard = () => {
                     <Chip
                       label={decision.status}
                       size="small"
-                      color={decision.status === "APPROVED" ? "success" : "error"}
+                      color={
+                        decision.status === "APPROVED" ? "success" : "error"
+                      }
                       sx={{ mt: 1 }}
                     />
                   </Box>
@@ -227,7 +315,9 @@ const ProcurementDashboard = () => {
               ))}
               {combined.length === 0 && (
                 <Grid item xs={12}>
-                  <Typography color="text.secondary">No recent decisions</Typography>
+                  <Typography color="text.secondary">
+                    No recent decisions
+                  </Typography>
                 </Grid>
               )}
             </Grid>
