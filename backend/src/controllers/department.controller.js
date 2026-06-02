@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-
+// test comment
 export const getDepartments = async (req, res) => {
   try {
     const departments = await prisma.department.findMany({
@@ -62,7 +62,7 @@ export const updateDepartment = async (req, res) => {
     const existingDepartment = await prisma.department.findUnique({
       where: { name },
     });
-    
+
     if (existingDepartment && existingDepartment.id !== parseInt(id, 10)) {
       return res.status(400).json({ error: "Department name already exists." });
     }
@@ -85,7 +85,7 @@ export const updateDepartment = async (req, res) => {
         },
       },
     });
-    
+
     res.json(updatedDepartment);
   } catch (error) {
     res.status(500).json({ error: "Failed to update department" });
