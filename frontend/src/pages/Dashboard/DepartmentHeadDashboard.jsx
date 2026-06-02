@@ -21,28 +21,42 @@ import {
   CheckCircle as ApprovedIcon,
   Schedule as PendingIcon,
 } from "@mui/icons-material";
-import { useDashboardStats, useRequisitions, useServiceRequests } from "../../services/queries";
+import {
+  useDashboardStats,
+  useRequisitions,
+  useServiceRequests,
+} from "../../services/queries";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-
+// This component renders the department head dashboard, providing an overview of the department's requisitions and service requests. It displays key metrics such as total requests, approved requests, pending requests, and team members. The dashboard also includes lists of recent requisitions and service requests created by the department head, with quick access to view details or create new requests. The layout is responsive and organized for easy navigation and quick insights into departmental activities.
 const DepartmentHeadDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: stats, isLoading: statsLoading, error } = useDashboardStats();
-  const { data: reqs, isLoading: reqLoading, error: reqError } = useRequisitions({});
-  const { data: sreqs, isLoading: sreqLoading, error: sreqError } = useServiceRequests({});
+  const {
+    data: reqs,
+    isLoading: reqLoading,
+    error: reqError,
+  } = useRequisitions({});
+  const {
+    data: sreqs,
+    isLoading: sreqLoading,
+    error: sreqError,
+  } = useServiceRequests({});
 
   const currentUserId = user?.id || user?._id || user?.userId;
   const currentUserEmail = user?.email;
-  
+
   const matchesUser = useMemo(() => {
     return (u) => {
       const uid = u?.id || u?._id || u?.userId;
       const email = u?.email;
       return (
         (currentUserId && String(uid) === String(currentUserId)) ||
-        (currentUserEmail && email && email.toLowerCase() === currentUserEmail.toLowerCase())
+        (currentUserEmail &&
+          email &&
+          email.toLowerCase() === currentUserEmail.toLowerCase())
       );
     };
   }, [currentUserId, currentUserEmail]);
@@ -124,20 +138,33 @@ const DepartmentHeadDashboard = () => {
             <Typography
               variant="subtitle2"
               color="text.secondary"
-              sx={{ mt: 2, mb: 1, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+              sx={{
+                mt: 2,
+                mb: 1,
+                fontWeight: 700,
+                letterSpacing: 0.5,
+                textTransform: "uppercase",
+              }}
             >
               Requisitions
             </Typography>
             {reqError && (
-              <Typography variant="caption" color="error">Failed to load requisitions</Typography>
+              <Typography variant="caption" color="error">
+                Failed to load requisitions
+              </Typography>
             )}
             <List>
               {myRequisitions.slice(0, 3).map((req, index) => (
-                <ListItem key={req.id || req._id || index} divider onClick={() => navigate(`/requisitions/${req.id || req._id}`)} sx={{ cursor: "pointer" }}>
+                <ListItem
+                  key={req.id || req._id || index}
+                  divider
+                  onClick={() => navigate(`/requisitions/${req.id || req._id}`)}
+                  sx={{ cursor: "pointer" }}
+                >
                   <ListItemText
                     primary={req.title}
                     secondary={`${req.items?.length || 0} items • ${new Date(
-                      req.createdAt
+                      req.createdAt,
                     ).toLocaleDateString()}`}
                   />
                   <Chip
@@ -147,8 +174,8 @@ const DepartmentHeadDashboard = () => {
                       req.status === "APPROVED"
                         ? "success"
                         : req.status === "PENDING"
-                        ? "warning"
-                        : "default"
+                          ? "warning"
+                          : "default"
                     }
                   />
                 </ListItem>
@@ -165,16 +192,30 @@ const DepartmentHeadDashboard = () => {
             <Typography
               variant="subtitle2"
               color="text.secondary"
-              sx={{ mb: 1, fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+              sx={{
+                mb: 1,
+                fontWeight: 700,
+                letterSpacing: 0.5,
+                textTransform: "uppercase",
+              }}
             >
               Service Requests
             </Typography>
             {sreqError && (
-              <Typography variant="caption" color="error">Failed to load service requests</Typography>
+              <Typography variant="caption" color="error">
+                Failed to load service requests
+              </Typography>
             )}
             <List>
               {myServiceRequests.slice(0, 3).map((req, index) => (
-                <ListItem key={req.id || req._id || index} divider onClick={() => navigate(`/service-requests/${req.id || req._id}`)} sx={{ cursor: "pointer" }}>
+                <ListItem
+                  key={req.id || req._id || index}
+                  divider
+                  onClick={() =>
+                    navigate(`/service-requests/${req.id || req._id}`)
+                  }
+                  sx={{ cursor: "pointer" }}
+                >
                   <ListItemText
                     primary={req.title}
                     secondary={new Date(req.createdAt).toLocaleDateString()}
@@ -186,8 +227,8 @@ const DepartmentHeadDashboard = () => {
                       req.status === "APPROVED"
                         ? "success"
                         : req.status === "PENDING"
-                        ? "warning"
-                        : "default"
+                          ? "warning"
+                          : "default"
                     }
                   />
                 </ListItem>
@@ -203,7 +244,7 @@ const DepartmentHeadDashboard = () => {
               variant="contained"
               startIcon={<RequestIcon />}
               sx={{ mt: 2 }}
-              onClick={() => navigate('/requisitions/new')}
+              onClick={() => navigate("/requisitions/new")}
             >
               Create New Request
             </Button>
@@ -234,13 +275,28 @@ const DepartmentHeadDashboard = () => {
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Box display="flex" flexDirection="column" gap={1}>
-              <Button variant="contained" startIcon={<RequestIcon />} fullWidth onClick={() => navigate('/requisitions/new')}>
+              <Button
+                variant="contained"
+                startIcon={<RequestIcon />}
+                fullWidth
+                onClick={() => navigate("/requisitions/new")}
+              >
                 New Requisition
               </Button>
-              <Button variant="outlined" startIcon={<RequestIcon />} fullWidth onClick={() => navigate('/service-requests/new')}>
+              <Button
+                variant="outlined"
+                startIcon={<RequestIcon />}
+                fullWidth
+                onClick={() => navigate("/service-requests/new")}
+              >
                 New Service Request
               </Button>
-              <Button variant="outlined" startIcon={<TeamIcon />} fullWidth disabled>
+              <Button
+                variant="outlined"
+                startIcon={<TeamIcon />}
+                fullWidth
+                disabled
+              >
                 View Team
               </Button>
             </Box>
