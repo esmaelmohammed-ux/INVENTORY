@@ -26,7 +26,7 @@ import {
   AccountCircle as ProfileIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
-
+// This component renders the sidebar navigation for the inventory management system. It displays different menu items based on the user's role and includes a user profile section at the bottom. The sidebar is responsive, collapsing into a drawer on smaller screens. It uses Material-UI components for styling and layout, and it integrates with React Router for navigation.
 const menuItems = [
   {
     text: "Dashboard",
@@ -117,11 +117,11 @@ const Sidebar = ({ open, onClose, isMobile, userRole, user }) => {
   };
 
   const filteredMenuItems = menuItems.filter((item) =>
-    item.roles.includes(userRole)
+    item.roles.includes(userRole),
   );
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    navigate("/profile");
     if (isMobile) {
       onClose();
     }
@@ -130,7 +130,7 @@ const Sidebar = ({ open, onClose, isMobile, userRole, user }) => {
   const getRoleColor = (role) => {
     const colors = {
       ADMIN: "error",
-      STOREKEEPER: "warning", 
+      STOREKEEPER: "warning",
       PROCUREMENT_OFFICER: "info",
       DEPARTMENT_HEAD: "success",
       AUDITOR: "secondary",
@@ -139,7 +139,14 @@ const Sidebar = ({ open, onClose, isMobile, userRole, user }) => {
   };
 
   const drawerContent = (
-    <Box sx={{ width: drawerWidth, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box
+      sx={{
+        width: drawerWidth,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Box sx={{ p: 1, textAlign: "left" }}>
         <Box sx={{ display: "flex", gap: 1.5 }}>
           <HomeWorkIcon
@@ -203,52 +210,60 @@ const Sidebar = ({ open, onClose, isMobile, userRole, user }) => {
           );
         })}
       </List>
-      
+
       {/* User Profile Section at Bottom */}
-      <Box sx={{ mt: 'auto', p: 1 }}>
+      <Box sx={{ mt: "auto", p: 1 }}>
         <Divider sx={{ mb: 1 }} />
         <ListItemButton
           onClick={handleProfileClick}
           sx={{
             borderRadius: 2,
             p: 1.5,
-            '&:hover': {
+            "&:hover": {
               backgroundColor: theme.palette.action.hover,
-            }
+            },
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              gap: 1.5,
+            }}
+          >
             <Avatar
               sx={{
                 width: 40,
                 height: 40,
                 bgcolor: theme.palette.primary.main,
-                fontSize: '1rem',
+                fontSize: "1rem",
               }}
             >
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
+              {user?.firstName?.[0]}
+              {user?.lastName?.[0]}
             </Avatar>
-            
+
             <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography 
-                variant="subtitle2" 
-                sx={{ 
+              <Typography
+                variant="subtitle2"
+                sx={{
                   fontWeight: 600,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {user?.firstName} {user?.lastName}
               </Typography>
-              <Typography 
-                variant="caption" 
+              <Typography
+                variant="caption"
                 color="text.secondary"
-                sx={{ 
-                  display: 'block',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                sx={{
+                  display: "block",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {user?.email}
@@ -258,11 +273,13 @@ const Sidebar = ({ open, onClose, isMobile, userRole, user }) => {
                 color={getRoleColor(user?.role)}
                 size="small"
                 variant="outlined"
-                sx={{ mt: 0.5, fontSize: '0.7rem', height: 20 }}
+                sx={{ mt: 0.5, fontSize: "0.7rem", height: 20 }}
               />
             </Box>
-            
-            <ProfileIcon sx={{ color: theme.palette.text.secondary, fontSize: 20 }} />
+
+            <ProfileIcon
+              sx={{ color: theme.palette.text.secondary, fontSize: 20 }}
+            />
           </Box>
         </ListItemButton>
       </Box>
