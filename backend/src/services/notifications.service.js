@@ -29,7 +29,7 @@ export const notificationTriggers = {
       const storekeepers = await getUsersByRole(["STOREKEEPER", "ADMIN"]);
       await sendBulkEmail(storekeepers, "lowStock", items);
       console.log(
-        `📧 Low stock notifications sent to ${storekeepers.length} users`
+        `📧 Low stock notifications sent to ${storekeepers.length} users`,
       );
     } catch (error) {
       console.error("Low stock notification failed:", error);
@@ -53,7 +53,7 @@ export const notificationTriggers = {
           action: requisition.status,
         });
         console.log(
-          `📧 Requisition status notification sent to ${creator.email}`
+          `📧 Requisition status notification sent to ${creator.email}`,
         );
       }
     } catch (error) {
@@ -72,7 +72,7 @@ export const notificationTriggers = {
       ]);
       await sendBulkEmail(procurementOfficers, "newRequisition", requisition);
       console.log(
-        `📧 New requisition notifications sent to ${procurementOfficers.length} users`
+        `📧 New requisition notifications sent to ${procurementOfficers.length} users`,
       );
     } catch (error) {
       console.error("New requisition notification failed:", error);
@@ -96,7 +96,7 @@ export const notificationTriggers = {
           action: serviceRequest.status,
         });
         console.log(
-          `📧 Service request status notification sent to ${creator.email}`
+          `📧 Service request status notification sent to ${creator.email}`,
         );
       }
     } catch (error) {
@@ -133,7 +133,7 @@ export const scheduledNotifications = {
             minQuantity: item.minQuantity,
             unit: item.unit,
             category: item.category.name,
-          }))
+          })),
         );
       }
     } catch (error) {
