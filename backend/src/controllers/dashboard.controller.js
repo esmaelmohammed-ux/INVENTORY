@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma.js";
-
+// test comment1
 export const getDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -75,21 +75,21 @@ async function getCommonStats(departmentId, userRole) {
 
       userRole === "STOREKEEPER" || userRole === "ADMIN"
         ? prisma.item.findMany({
-            where: {
-              quantity: {
-                lte: prisma.item.fields.minQuantity,
+          where: {
+            quantity: {
+              lte: prisma.item.fields.minQuantity,
+            },
+          },
+          include: {
+            category: {
+              select: {
+                name: true,
               },
             },
-            include: {
-              category: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-            orderBy: { quantity: "asc" },
-            take: 10,
-          })
+          },
+          orderBy: { quantity: "asc" },
+          take: 10,
+        })
         : Promise.resolve([]),
     ]);
 
@@ -427,7 +427,7 @@ async function getDepartmentHeadDashboard(departmentId, userId) {
 async function getAuditorDashboard() {
   const [
     totalUsers,
-    totalDepartments, 
+    totalDepartments,
     totalItems,
     recentTransactions,
     systemMetrics,
@@ -439,7 +439,7 @@ async function getAuditorDashboard() {
     prisma.user.count(),
     prisma.department.count(),
     prisma.item.count(),
-    
+
     // Recent transactions for audit trail
     prisma.transaction.findMany({
       include: {
@@ -453,7 +453,7 @@ async function getAuditorDashboard() {
       orderBy: { createdAt: "desc" },
       take: 20,
     }),
-    
+
     // System health metrics
     Promise.resolve({
       databaseConnections: 1, // Mock data - could be real metrics
@@ -461,7 +461,7 @@ async function getAuditorDashboard() {
       memoryUsage: process.memoryUsage(),
       nodeVersion: process.version,
     }),
-    
+
     // Recent audit-worthy activities
     prisma.requisition.findMany({
       where: {
@@ -480,19 +480,19 @@ async function getAuditorDashboard() {
       orderBy: { processedAt: "desc" },
       take: 15,
     }),
-    
+
     // Compliance metrics
     Promise.all([
       prisma.requisition.count({ where: { status: "PENDING" } }),
-      prisma.requisition.count({ 
-        where: { 
+      prisma.requisition.count({
+        where: {
           createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
-        } 
+        }
       }),
-      prisma.item.count({ 
-        where: { 
-          quantity: { lte: prisma.item.fields.minQuantity } 
-        } 
+      prisma.item.count({
+        where: {
+          quantity: { lte: prisma.item.fields.minQuantity }
+        }
       }),
     ]).then(([pendingCount, weeklyReqs, lowStockCount]) => ({
       pendingRequisitions: pendingCount,
@@ -500,7 +500,7 @@ async function getAuditorDashboard() {
       lowStockAlerts: lowStockCount,
       complianceScore: Math.max(0, 100 - (pendingCount * 2) - (lowStockCount * 3))
     })),
-    
+
     // Transaction statistics by type
     prisma.transaction.groupBy({
       by: ["type"],
@@ -521,7 +521,7 @@ async function getAuditorDashboard() {
       systemHealth: "Operational",
       lastAuditDate: new Date().toISOString(),
     },
-    
+
     // System information for auditors
     systemInfo: {
       nodeVersion: systemMetrics.nodeVersion,
@@ -533,7 +533,7 @@ async function getAuditorDashboard() {
       databaseStatus: "Connected",
       environment: process.env.NODE_ENV || "development",
     },
-    
+
     // Recent audit trail
     auditTrail: recentTransactions.map((transaction) => ({
       id: transaction.id,
@@ -541,17 +541,17 @@ async function getAuditorDashboard() {
       action: `${transaction.type}: ${transaction.item.name}`,
       quantity: Math.abs(transaction.quantity),
       unit: transaction.item.unit,
-      user: transaction.user 
+      user: transaction.user
         ? `${transaction.user.firstName} ${transaction.user.lastName}`
         : "System",
       userRole: transaction.user?.role || "SYSTEM",
       timestamp: transaction.createdAt,
       notes: transaction.notes,
     })),
-    
+
     // Compliance and oversight data
     complianceMetrics: complianceData,
-    
+
     // Recent decisions for audit review
     recentDecisions: auditTrail.map((decision) => ({
       id: decision.id,
@@ -560,14 +560,14 @@ async function getAuditorDashboard() {
       status: decision.status,
       department: decision.department.name,
       requestedBy: `${decision.createdBy.firstName} ${decision.createdBy.lastName}`,
-      approvedBy: decision.processedBy 
+      approvedBy: decision.processedBy
         ? `${decision.processedBy.firstName} ${decision.processedBy.lastName}`
         : null,
       approverRole: decision.processedBy?.role || null,
       processedAt: decision.processedAt,
       createdAt: decision.createdAt,
     })),
-    
+
     // Transaction analytics
     transactionAnalytics: {
       byType: transactionStats.reduce((acc, stat) => {
