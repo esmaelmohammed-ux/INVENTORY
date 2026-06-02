@@ -1,9 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { authService } from "../services/auth";
-
+// This context provides authentication-related state and functions to the entire application. It manages the current user's information, loading state, and provides methods for logging in and out. The context also includes utility functions to check if a user is authenticated and if they have specific roles, which can be used for role-based access control throughout the app.
 const AuthContext = createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
