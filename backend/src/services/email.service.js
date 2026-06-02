@@ -40,7 +40,7 @@ const emailTemplates = {
                 <td style="padding: 12px; border: 1px solid #dee2e6;">${item.minQuantity} ${item.unit}</td>
                 <td style="padding: 12px; border: 1px solid #dee2e6; color: #dc3545;">CRITICAL</td>
               </tr>
-            `
+            `,
               )
               .join("")}
           </tbody>
@@ -81,8 +81,8 @@ const emailTemplates = {
           - Department: ${requisition.department.name}<br>
           - Status: ${requisition.status}<br>
           - Processed By: ${requisition.processedBy.firstName} ${
-      requisition.processedBy.lastName
-    }<br>
+            requisition.processedBy.lastName
+          }<br>
           - Processed At: ${new Date(requisition.processedAt).toLocaleString()}
         </div>
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
@@ -120,10 +120,10 @@ const emailTemplates = {
           - Department: ${serviceRequest.department.name}<br>
           - Status: ${serviceRequest.status}<br>
           - Processed By: ${serviceRequest.processedBy.firstName} ${
-      serviceRequest.processedBy.lastName
-    }<br>
+            serviceRequest.processedBy.lastName
+          }<br>
           - Processed At: ${new Date(
-            serviceRequest.processedAt
+            serviceRequest.processedAt,
           ).toLocaleString()}
         </div>
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
@@ -147,8 +147,8 @@ const emailTemplates = {
           - Title: ${requisition.title}<br>
           - Department: ${requisition.department.name}<br>
           - Submitted By: ${requisition.createdBy.firstName} ${
-      requisition.createdBy.lastName
-    }<br>
+            requisition.createdBy.lastName
+          }<br>
           - Items: ${requisition.items.length} item(s)<br>
           - Submitted At: ${new Date(requisition.createdAt).toLocaleString()}
         </div>
@@ -202,8 +202,8 @@ export const sendEmail = async (to, templateName, data) => {
 export const sendBulkEmail = async (recipients, templateName, data) => {
   const results = await Promise.all(
     recipients.map((recipient) =>
-      sendEmail(recipient.email, templateName, { ...data, recipient })
-    )
+      sendEmail(recipient.email, templateName, { ...data, recipient }),
+    ),
   );
   return results.every((result) => result);
 };
