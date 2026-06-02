@@ -6,7 +6,7 @@ import ProcurementDashboard from "./ProcurementDashboard";
 import DepartmentHeadDashboard from "./DepartmentHeadDashboard";
 import AuditorDashboard from "./AuditorDashboard";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
-
+// This component serves as the main dashboard page for the inventory management system. It checks the user's role and renders the appropriate dashboard view based on their permissions. If the user is still loading, it displays a loading spinner. If the user's role does not match any of the predefined roles, it shows a warning alert indicating that no dashboard is available for their role. The dashboard provides an overview of key metrics and recent activity relevant to the user's role in the system.
 const Dashboard = () => {
   const { user, loading } = useAuth();
 
