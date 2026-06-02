@@ -39,7 +39,7 @@ import {
   useDeleteDepartment,
 } from "../../services/queries";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
-
+// This component renders the department management page for administrators. It allows admins to view a list of departments, create new departments, edit existing ones, and delete departments that have no associated users. The page includes a data grid with actions for each department, as well as dialogs for creating/editing and viewing department details. It also handles loading states and displays notifications for successful or failed operations.
 const DepartmentManagement = () => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -95,7 +95,9 @@ const DepartmentManagement = () => {
     } catch (error) {
       setSnackbar({
         open: true,
-        message: error.response?.data?.error || `Failed to ${isEditMode ? 'update' : 'create'} department`,
+        message:
+          error.response?.data?.error ||
+          `Failed to ${isEditMode ? "update" : "create"} department`,
         severity: "error",
       });
     }
@@ -313,7 +315,8 @@ const DepartmentManagement = () => {
           sx={{
             color: params.row.users?.length > 0 ? "grey.400" : "error.main",
             "&:hover": {
-              bgcolor: params.row.users?.length > 0 ? "transparent" : "error.light",
+              bgcolor:
+                params.row.users?.length > 0 ? "transparent" : "error.light",
             },
           }}
         />,
@@ -335,7 +338,14 @@ const DepartmentManagement = () => {
     <Box sx={{ p: 3 }}>
       {/* Header */}
       <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            mb: 2,
+          }}
+        >
           <Box>
             <Typography
               variant="h4"
@@ -441,28 +451,35 @@ const DepartmentManagement = () => {
                 <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
                   {selectedDepartment.name}
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
                   {selectedDepartment.description}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Created: {new Date(selectedDepartment.createdAt).toLocaleDateString()}
+                  Created:{" "}
+                  {new Date(selectedDepartment.createdAt).toLocaleDateString()}
                 </Typography>
               </Box>
-              
+
               <Box>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
                   Associated Users ({selectedDepartment.users?.length || 0})
                 </Typography>
                 {selectedDepartment.users?.length > 0 ? (
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
                     {selectedDepartment.users.map((user) => (
-                      <Paper 
-                        key={user.id} 
-                        sx={{ p: 2, bgcolor: "grey.50" }}
-                      >
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Paper key={user.id} sx={{ p: 2, bgcolor: "grey.50" }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
                           <Avatar sx={{ bgcolor: "primary.main" }}>
-                            {user.firstName?.[0]}{user.lastName?.[0]}
+                            {user.firstName?.[0]}
+                            {user.lastName?.[0]}
                           </Avatar>
                           <Box sx={{ flexGrow: 1 }}>
                             <Typography variant="subtitle2">
@@ -472,10 +489,10 @@ const DepartmentManagement = () => {
                               {user.email}
                             </Typography>
                           </Box>
-                          <Chip 
-                            label={user.role?.replace('_', ' ')} 
-                            size="small" 
-                            color="primary" 
+                          <Chip
+                            label={user.role?.replace("_", " ")}
+                            size="small"
+                            color="primary"
                             variant="outlined"
                           />
                         </Box>
@@ -625,7 +642,10 @@ const DepartmentManagement = () => {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+      >
         <DialogTitle sx={{ color: "error.main", fontWeight: 600 }}>
           Confirm Delete
         </DialogTitle>
@@ -636,8 +656,8 @@ const DepartmentManagement = () => {
           </Typography>
           {selectedDepartment?.users?.length > 0 && (
             <Alert severity="warning" sx={{ mt: 2 }}>
-              This department has {selectedDepartment.users.length} associated user(s).
-              Please reassign or remove users before deleting.
+              This department has {selectedDepartment.users.length} associated
+              user(s). Please reassign or remove users before deleting.
             </Alert>
           )}
         </DialogContent>
@@ -648,7 +668,8 @@ const DepartmentManagement = () => {
             color="error"
             variant="contained"
             disabled={
-              deleteDepartment.isLoading || selectedDepartment?.users?.length > 0
+              deleteDepartment.isLoading ||
+              selectedDepartment?.users?.length > 0
             }
           >
             {deleteDepartment.isLoading ? "Deleting..." : "Delete"}
