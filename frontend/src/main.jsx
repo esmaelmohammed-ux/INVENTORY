@@ -8,3 +8,4 @@ createRoot(document.getElementById("root")).render(
     <App />
   </StrictMode>,
 );
+// Note: The `StrictMode` component is a development tool that helps identify potential problems in the application. It does not affect the production build and is only active during development.
