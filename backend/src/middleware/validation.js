@@ -8,7 +8,7 @@ export const validateRequest = (validations) => {
     if (errors.isEmpty()) {
       return next();
     }
-
+    // comment
     res.status(400).json({
       error: "Validation failed",
       details: errors.array(),
