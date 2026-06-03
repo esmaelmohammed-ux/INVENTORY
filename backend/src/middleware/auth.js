@@ -51,7 +51,7 @@ export const authorize = (...allowedRoles) => {
     next();
   };
 };
-// comment 
+
 export const canAccessDepartment = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ error: "Authentication required" });
