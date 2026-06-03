@@ -29,7 +29,7 @@ export const itemValidation = [
   body("unit").notEmpty().trim(),
   body("categoryId").isInt({ min: 1 }),
 ];
-// comment
+
 export const requisitionValidation = [
   body("title").notEmpty().trim(),
   body("items").isArray({ min: 1 }),
