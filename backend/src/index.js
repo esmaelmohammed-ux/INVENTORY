@@ -19,7 +19,7 @@ import auditLogRoutes from "./routes/auditLog.route.js";
 import { startScheduledTasks } from "./services/scheduler.js";
 import healthRoutes from "./routes/health.route.js";
 import departmentRoute from "./routes/department.route.js";
-// This is the main entry point for the inventory management backend application. It sets up the Express server, applies security and performance middleware, defines API routes for authentication, user management, item management, requisitions, service requests, dashboard statistics, transactions, reports, audit logs, and department management. The server also includes error handling and connects to the database using Prisma. Additionally, it starts scheduled tasks for background processing when the server is launched.
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
